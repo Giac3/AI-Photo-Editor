@@ -24,6 +24,15 @@ function App() {
     document.getElementById('form')!.style.display = "block"
   }
 
+  document.getElementById('form-button')?.addEventListener('click', () => {
+    if((document.getElementById('input-detail1') as HTMLInputElement).value === "" || (document.getElementById('input-detail2') as HTMLInputElement).value === "") return
+    else {
+      let setting: string = (document.getElementById('input-detail1') as HTMLInputElement).value
+      let style: string = (document.getElementById('input-detail2') as HTMLInputElement).value
+      let detail: string = (document.getElementById('input-detail3') as HTMLInputElement).value
+      console.log(setting,style,detail)
+    }
+  })
 
   return (
   <div className='grid place-items-center'>
