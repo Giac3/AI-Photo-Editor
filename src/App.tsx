@@ -4,9 +4,9 @@ import './App.css';
 function App() { 
   const [filebase64,setFileBase64] = useState<string>("")
 
-
   // The Magic all happens here.
   function convertFile(files: FileList|null) {
+    
     if (files) {
       const fileRef = files[0] || ""
       const fileType: string= fileRef.type || ""
@@ -24,6 +24,21 @@ function App() {
     document.getElementById('form')!.style.display = "block"
   }
 
+  
+
+const apiCall = async (imageData: string) => {
+  const url = `http://localhost:8000/apipic/`
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'text/plain',
+  },
+    body: `${imageData}`
+  })
+  const data = await res.json()
+  console.log(data)
+}
+
   document.getElementById('form-button')?.addEventListener('click', () => {
     if((document.getElementById('input-detail1') as HTMLInputElement).value === "" || (document.getElementById('input-detail2') as HTMLInputElement).value === "") return
     else {
@@ -31,8 +46,11 @@ function App() {
       let style: string = (document.getElementById('input-detail2') as HTMLInputElement).value
       let detail: string = (document.getElementById('input-detail3') as HTMLInputElement).value
       console.log(setting,style,detail)
+      apiCall((document.getElementById('image-holder') as HTMLInputElement).src)
     }
   })
+  
+  
 
   return (
   <div className='grid place-items-center'>
