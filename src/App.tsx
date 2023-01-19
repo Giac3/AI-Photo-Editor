@@ -37,6 +37,11 @@ const apiCall = async (imageData: string) => {
   })
   const data = await res.json()
   console.log(data)
+
+  const url2 = `http://localhost:8000/apires`
+  const res2 = await fetch(url2)
+  const data2 = await res2.json()
+  console.log(data2)
 }
 
   document.getElementById('form-button')?.addEventListener('click', () => {
