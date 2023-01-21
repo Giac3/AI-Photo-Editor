@@ -4,13 +4,15 @@ import './App.css';
 function App() { 
   const [filebase64,setFileBase64] = useState<string>("")
 
-  // The Magic all happens here.
+  document.getElementById('reloadBtn')?.addEventListener('click', () => {
+    window.location.reload();
+  })
+
   function convertFile(files: FileList|null) {
     
     if (files) {
       const fileRef = files[0] || ""
       const fileType: string= fileRef.type || ""
-      console.log("This file upload is of type:",fileType)
       const reader = new FileReader()
       reader.readAsBinaryString(fileRef)
       reader.onload=(ev: any) => {
@@ -24,7 +26,6 @@ function App() {
     document.getElementById('form')!.style.display = "block"
   }
 
-  
 
 const apiCall = async (imageData: string) => {
   const url = `http://localhost:8000/apipic/`
@@ -33,14 +34,16 @@ const apiCall = async (imageData: string) => {
     headers: {
       'Content-Type': 'text/plain',
   },
-    body: `${imageData}`
+    body: `${imageData}`,
   })
   const data = await res.json()
   console.log(data)
-  
+
+
   const url2 = `http://localhost:8000/apires/`
   const res2 = await fetch(url2)
   const data2 = await res2.json();
+  console.log(data2);
   (document.getElementById('resImage') as HTMLInputElement).src = data2[0].url;;
   (document.getElementById('resImage2') as HTMLInputElement).src = data2[1].url;;
   (document.getElementById('resImage3') as HTMLInputElement).src = data2[2].url;;
@@ -186,8 +189,13 @@ const apiCall = async (imageData: string) => {
             
           }
 
-          </div>
+
     </div>
+    <button id='reloadBtn' className='bg-blue-500 fixed duration-1000 shadow-md hover:bg-slate-200 fill-white hover:fill-black w-32 h-12 ml-32 mt-52 rounded-md flex justify-center items-center'>
+<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48"><path d="M24 40 8 24 24 8l2.1 2.1-12.4 12.4H40v3H13.7l12.4 12.4Z"/></svg>
+      </button>
+
+          </div>
     </div>
     </div>
   );
