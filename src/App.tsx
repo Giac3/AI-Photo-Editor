@@ -27,7 +27,7 @@ function App() {
   }
 
 
-const apiCall = async (imageData: string) => {
+const apiCall = async (imageData: string, callback: Function) => {
   const url = `http://localhost:8000/apipic/`
   const res = await fetch(url, {
     method: 'POST',
@@ -35,24 +35,28 @@ const apiCall = async (imageData: string) => {
       'Content-Type': 'text/plain',
   },
     body: `${imageData}`,
+    mode: 'no-cors',
   })
-  const data = await res.json()
-  console.log(data)
+  //const data = await res.json()
+  //console.log(data)
+  callback()
+  apiCall2()
+}
 
-
+const apiCall2 = async () => {
   const url2 = `http://localhost:8000/apires/`
   const res2 = await fetch(url2)
   const data2 = await res2.json();
   console.log(data2);
   (document.getElementById('resImage') as HTMLInputElement).src = data2[0].url;;
   (document.getElementById('resImage2') as HTMLInputElement).src = data2[1].url;;
-  (document.getElementById('resImage3') as HTMLInputElement).src = data2[2].url;;
-  (document.getElementById('resImage4') as HTMLInputElement).src = data2[3].url;;
-  (document.getElementById('resImage5') as HTMLInputElement).src = data2[4].url;;
-  (document.getElementById('resImage6') as HTMLInputElement).src = data2[5].url;;
-  (document.getElementById('resImage7') as HTMLInputElement).src = data2[6].url;;
-  (document.getElementById('resImage8') as HTMLInputElement).src = data2[7].url;;
-  (document.getElementById('resImage9') as HTMLInputElement).src = data2[8].url;;
+  //(document.getElementById('resImage3') as HTMLInputElement).src = data2[2].url;;
+  //(document.getElementById('resImage4') as HTMLInputElement).src = data2[3].url;;
+  //(document.getElementById('resImage5') as HTMLInputElement).src = data2[4].url;;
+  //(document.getElementById('resImage6') as HTMLInputElement).src = data2[5].url;;
+  //(document.getElementById('resImage7') as HTMLInputElement).src = data2[6].url;;
+  //(document.getElementById('resImage8') as HTMLInputElement).src = data2[7].url;;
+  //(document.getElementById('resImage9') as HTMLInputElement).src = data2[8].url;;
   (document.getElementById('loader') as HTMLInputElement).style.display = "none";
   (document.getElementById('resImages') as HTMLInputElement).style.display = "block";
 }
@@ -60,7 +64,7 @@ const apiCall = async (imageData: string) => {
   document.getElementById('form-button')?.addEventListener('click', () => {
     (document.getElementById('main') as HTMLInputElement).style.display = "none";
     (document.getElementById('loader') as HTMLInputElement).style.display = "block";
-    apiCall((document.getElementById('image-holder') as HTMLInputElement).src)
+    apiCall((document.getElementById('image-holder') as HTMLInputElement).src, apiCall)
   })
   
   
