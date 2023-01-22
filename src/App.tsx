@@ -27,36 +27,44 @@ function App() {
   }
 
 
-const apiCall = async (imageData: string, callback: Function) => {
-  const url = `http://localhost:8000/apipic/`
+const apiCall = async (imageData: string) => {
+  const url: string = `https://gptmail-server.herokuapp.com/apipic/`
   const res = await fetch(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'text/plain',
   },
     body: `${imageData}`,
-    mode: 'no-cors',
   })
-  //const data = await res.json()
-  //console.log(data)
-  callback()
-  apiCall2()
+  const data = await res.json();
+  console.log(data)
+}
+const delay = (ms: number | undefined) => new Promise(res => setTimeout(res, ms));
+const apiCall2 = async () => {
+  await delay(5000);
+  var requestOptions: object = {
+    method: 'GET',
+    redirect: 'follow'
+  };
+  
+  fetch("https://gptmail-server.herokuapp.com/apires/", requestOptions)
+    .then(response => response)
+    .then(result => handleResult(result))
+    .catch(error => console.log('error', error));
 }
 
-const apiCall2 = async () => {
-  const url2 = `http://localhost:8000/apires/`
-  const res2 = await fetch(url2)
-  const data2 = await res2.json();
-  console.log(data2);
-  (document.getElementById('resImage') as HTMLInputElement).src = data2[0].url;;
-  (document.getElementById('resImage2') as HTMLInputElement).src = data2[1].url;;
-  //(document.getElementById('resImage3') as HTMLInputElement).src = data2[2].url;;
-  //(document.getElementById('resImage4') as HTMLInputElement).src = data2[3].url;;
-  //(document.getElementById('resImage5') as HTMLInputElement).src = data2[4].url;;
-  //(document.getElementById('resImage6') as HTMLInputElement).src = data2[5].url;;
-  //(document.getElementById('resImage7') as HTMLInputElement).src = data2[6].url;;
-  //(document.getElementById('resImage8') as HTMLInputElement).src = data2[7].url;;
-  //(document.getElementById('resImage9') as HTMLInputElement).src = data2[8].url;;
+
+const handleResult = async (result:any) => {
+  let data2 = await result.json();
+  (document.getElementById('resImage') as HTMLInputElement).src = data2[0].url;
+  (document.getElementById('resImage2') as HTMLInputElement).src = data2[1].url;
+  (document.getElementById('resImage3') as HTMLInputElement).src = data2[2].url;
+  (document.getElementById('resImage4') as HTMLInputElement).src = data2[3].url;
+  //(document.getElementById('resImage5') as HTMLInputElement).src = data2[4].url;
+  //(document.getElementById('resImage6') as HTMLInputElement).src = data2[5].url;
+  //(document.getElementById('resImage7') as HTMLInputElement).src = data2[6].url;
+  //(document.getElementById('resImage8') as HTMLInputElement).src = data2[7].url;
+  //(document.getElementById('resImage9') as HTMLInputElement).src = data2[8].url;
   (document.getElementById('loader') as HTMLInputElement).style.display = "none";
   (document.getElementById('resImages') as HTMLInputElement).style.display = "block";
 }
@@ -64,7 +72,8 @@ const apiCall2 = async () => {
   document.getElementById('form-button')?.addEventListener('click', () => {
     (document.getElementById('main') as HTMLInputElement).style.display = "none";
     (document.getElementById('loader') as HTMLInputElement).style.display = "block";
-    apiCall((document.getElementById('image-holder') as HTMLInputElement).src, apiCall)
+    apiCall((document.getElementById('image-holder') as HTMLInputElement).src)
+    apiCall2()
   })
   
   
@@ -101,16 +110,17 @@ const apiCall2 = async () => {
     </div>
     </div>
     <div id='loader' role="status" className='hidden scale-150'>
-    <svg aria-hidden="true" className="w-8 h-8 mr-2 text-gray-200 animate-spin dark:text-slate-500 fill-blue-500" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+    <svg aria-hidden="true" className="w-8 ml-20 h-8 mr-2 text-gray-200 animate-spin dark:text-slate-500 fill-blue-500" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
         <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
     </svg>
-    
+<h1 className=' text-blue-500 text-center font-extrabold text-xl'>One Moment Please</h1>    
     </div>
     <div id='resImages' className='hidden'>
     <div className=' bg-slate-500 h-96  w-96 rounded-md text-center content-center'>
         
-          <div className="h-56 grid grid-cols-3 gap-4 content-start ...">
+          <div className="h-56 grid grid-cols-2 gap-4 content-start ...">
           { filebase64 &&
             <>
             {(filebase64.indexOf("image/") > -1) && 
@@ -147,7 +157,7 @@ const apiCall2 = async () => {
             </>
             
           }
-          { filebase64 &&
+          { /*filebase64 &&
             <>
             {(filebase64.indexOf("image/") > -1) && 
             <img id='resImage5' className='hover:scale-150 duration-500 rounded-xl' alt='' src="" width={300} />
@@ -190,10 +200,9 @@ const apiCall2 = async () => {
             }
             
             </>
-            
+            */
           }
-
-
+          
     </div>
     <button id='reloadBtn' className='bg-blue-500 fixed duration-1000 shadow-md hover:bg-slate-200 fill-white hover:fill-black w-32 h-12 ml-32 mt-52 rounded-md flex justify-center items-center'>
 <svg xmlns="http://www.w3.org/2000/svg" height="48" width="48"><path d="M24 40 8 24 24 8l2.1 2.1-12.4 12.4H40v3H13.7l12.4 12.4Z"/></svg>
